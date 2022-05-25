@@ -33,9 +33,10 @@ jobs:
 
           # import p12 to keychain
           security import $CERTIFICATE_PATH -P "$P12_PASSWORD" -A -t cert -f pkcs12 -k $KEYCHAIN_PATH
-          
+          security set-key-partition-list -S apple-tool:,apple:, -s -k "$KEYCHAIN_PASSWORD" -D "${BUILD_CERTIFICATE_BASE64}" -t private $KEYCHAIN_PATH
+
           # import cert to keychain
-          sudo security add-trusted-cert -d -r trustRoot -k $KEYCHAIN_PATH $IDENTITY_PATH
+          # sudo security add-trusted-cert -d -r trustRoot -k $KEYCHAIN_PATH $IDENTITY_PATH
           
           security list-keychain -d user -s $KEYCHAIN_PATH
 
