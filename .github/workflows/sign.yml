@@ -18,15 +18,15 @@ jobs:
           KEYCHAINPATH=$RUNNER_TEMP/app-signing.keychain-db
 
           # import certificate and provisioning profile from secrets
-          echo -n $CERTPATH | base64 --decode --output $CERTPATH
+          echo -n "$CERT" | base64 --decode --output "$CERTPATH"
 
           # create temporary keychain
-          security create-keychain -p $KEYCHAINPWD $KEYCHAINPATH
-          security set-keychain-settings -lut 21600 $KEYCHAINPATH
-          security unlock-keychain -p $KEYCHAINPWD $KEYCHAINPATH
+          security create-keychain -p "$KEYCHAINPWD" "$KEYCHAINPATH"
+          security set-keychain-settings -lut 21600 "$KEYCHAINPATH"
+          security unlock-keychain -p "$KEYCHAINPWD" "$KEYCHAINPATH"
 
           # import p12 to keychain
-          security import $CERT -P $CERTPWD -A -t cert -f pkcs12 -k $KEYCHAINPATH
+          security import "$CERTPATH" -P $CERTPWD -A -t cert -f pkcs12 -k $KEYCHAINPATH
           security set-key-partition-list -S apple-tool:,apple:, -s -k $KEYCHAINPATH -D "${CERT}" -t private $KEYCHAINPATH
           
           security list-keychain -d user -s $KEYCHAINPATH
