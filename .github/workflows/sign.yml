@@ -15,21 +15,21 @@ jobs:
           # create variables
           CERTPATH=$RUNNER_TEMP/flucoma.p12
           KEYCHAINPWD=foobarbazbob
-          KEYCHAINPATH=
+          KEYCHAINPATH=$RUNNER_TEMP/app-signing.keychain-db
 
           # import certificate and provisioning profile from secrets
           echo -n $CERTPATH | base64 --decode --output $CERTPATH
 
           # create temporary keychain
-          security create-keychain -p "$KEYCHAINPWD" $KEYCHAIN_PATH
-          security set-keychain-settings -lut 21600 $KEYCHAIN_PATH
-          security unlock-keychain -p "$KEYCHAIN_PASSWORD" $KEYCHAIN_PATH
+          security create-keychain -p $KEYCHAINPWD $KEYCHAINPATH
+          security set-keychain-settings -lut 21600 $KEYCHAINPATH
+          security unlock-keychain -p $KEYCHAINPWD $KEYCHAINPATH
 
           # import p12 to keychain
-          security import $CERTIFICATE_PATH -P "$P12_PASSWORD" -A -t cert -f pkcs12 -k $KEYCHAIN_PATH
-          security set-key-partition-list -S apple-tool:,apple:, -s -k "$KEYCHAIN_PASSWORD" -D "${BUILD_CERTIFICATE_BASE64}" -t private $KEYCHAIN_PATH
+          security import $CERT -P $CERTPWD -A -t cert -f pkcs12 -k $KEYCHAINPATH
+          security set-key-partition-list -S apple-tool:,apple:, -s -k $KEYCHAINPATH -D "${CERT}" -t private $KEYCHAINPATH
           
-          security list-keychain -d user -s $KEYCHAIN_PATH
+          security list-keychain -d user -s $KEYCHAINPATH
 
           # apply provisioning profile
           # mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
