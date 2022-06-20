@@ -1,5 +1,7 @@
 name: sign some binaries
 on: push
+    workflow_dispatch:
+
 
 jobs:
   build_with_signing:
