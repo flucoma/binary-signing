@@ -45,9 +45,6 @@ jobs:
 
           xcrun notarytool store-credentials "ACPASS" --apple-id "$APPUSR" --team-id "$TEAMID" --password "$APPPWD"
           xcrun notarytool submit to_be_notarized.zip --keychain-profile "ACPASS" --wait
-          # xcrun stapler staple fluid.libmanipulation.mxo
-
-      - name: Setup tmate session
-        uses: mxschmitt/action-tmate@v3
+          xcrun stapler staple fluid.libmanipulation.mxo
 
           
