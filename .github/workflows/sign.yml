@@ -10,6 +10,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
+      - name: Setup tmate session
+        uses: mxschmitt/action-tmate@v3
       - name: setup apple certificates and profiles
         env:
           CERT: ${{ secrets.CERT }}
@@ -40,6 +42,6 @@ jobs:
 
           security find-identity -p codesigning
 
-          codesign -s "Developer ID Application" ./binary/fluid.libmanipulation.mxo
+          # codesign -s "Developer ID Application" ./binary/fluid.libmanipulation.mxo
 
           
