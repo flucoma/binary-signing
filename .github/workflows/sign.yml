@@ -11,7 +11,7 @@ jobs:
       - uses: actions/checkout@v3
 
       - name: sign binaries
-        uses: flucoma/actions/distribution
+        uses: flucoma/actions/distribution@main
         with:
           binaries: 'mxo'
           CERT: ${{ secrets.CERT }}
