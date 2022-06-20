@@ -15,11 +15,11 @@ jobs:
         uses: flucoma/actions/distribution@main
         with:
           binaries: 'mxo'
-          CERT: "${{ secrets.CERT }}"
-          CERTPWD: ${{ secrets.CERTPWD }}
-          TEAMID: ${{ secrets.WWDRTEAMID }}
-          APPPWD: ${{ secrets.APPSTORECONNECTPWD }}
-          APPUSR: ${{ secrets.APPSTORECONNECTUSERNAME }}
+          cert: ${{ secrets.CERT }}
+          certpwd: ${{ secrets.CERTPWD }}
+          teamid: ${{ secrets.WWDRTEAMID }}
+          apppwd: ${{ secrets.APPSTORECONNECTPWD }}
+          appusr: ${{ secrets.APPSTORECONNECTUSERNAME }}
           
 
 
