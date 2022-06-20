@@ -26,7 +26,7 @@ jobs:
           # create temporary keychain
           security create-keychain -p "$KEYCHAINPWD" "$KEYCHAINPATH"
           security set-keychain-settings -lut 21600 "$KEYCHAINPATH"
-          security unlock-keychain -p "$KEYCHAINPWD" "$KEYCHAINPATH"
+          security unlock-keychain -p "$KEYCHAINPWD" "$KEYCHAINPATH" -T /usr/bin/codesign
 
           # import p12 to keychain
           security import "$CERTPATH" -P $CERTPWD -A -t cert -f pkcs12 -k $KEYCHAINPATH
@@ -39,5 +39,7 @@ jobs:
           # cp $PP_PATH ~/Library/MobileDevice/Provisioning\ Profiles
 
           security find-identity -p codesigning
+
+          codesign -s "Developer ID Application" ./binary/fluid.libmanipulation.mxo
 
           
