@@ -14,6 +14,9 @@ jobs:
         env:
           CERT: ${{ secrets.CERT }}
           CERTPWD: ${{ secrets.CERTPWD }}
+          TEAMID: ${{ secrets.WWDRTEAMID }}
+          APPPWD: ${{ secrets.APPSTORECONNECTPWD }}
+          APPUSR: ${{ secrets.APPSTORECONNECTUSERNAME }}
         run: |
           # create variables
           CERTPATH=$RUNNER_TEMP/flucoma.p12
@@ -36,7 +39,6 @@ jobs:
           security import "$CERTPATH" -P $CERTPWD -A -t cert -f pkcs12 -k $KEYCHAINPATH -T /usr/bin/codesign
           security set-key-partition-list -S apple-tool:,apple:, -s -k $KEYCHAINPATH -D "${CERT}" -t private $KEYCHAINPATH
           
-
           # codesign -s "Developer ID Application" ./binary/fluid.libmanipulation.mxo
       - name: Setup tmate session
         uses: mxschmitt/action-tmate@v3
