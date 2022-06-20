@@ -1,7 +1,6 @@
 name: sign some binaries
 on: 
-    workflow_dispatch:
-    push:
+  push:
 
 
 jobs:
@@ -17,34 +16,8 @@ jobs:
           TEAMID: ${{ secrets.WWDRTEAMID }}
           APPPWD: ${{ secrets.APPSTORECONNECTPWD }}
           APPUSR: ${{ secrets.APPSTORECONNECTUSERNAME }}
-        run: |
-          # create variables
-          CERTPATH=$RUNNER_TEMP/flucoma.p12
-          KEYCHAINPWD=foobarbazbob
-          KEYCHAINPATH=$RUNNER_TEMP/app-signing.keychain-db
+      - name: sign binaries
+        uses: flucoma/actions/distribution
 
-          # import certificate and provisioning profile from secrets
-          echo -n "$CERT" | base64 --decode --output "$CERTPATH"
-
-          # create temporary keychain
-          security create-keychain -p "$KEYCHAINPWD" "$KEYCHAINPATH"
-
-          # append temp keychain to the user domain
-          security list-keychain -d user -s "$KEYCHAINPATH"
-          security set-keychain-settings "$KEYCHAINPATH"
-          security unlock-keychain -p "$KEYCHAINPWD" "$KEYCHAINPATH"
-
-          # import p12 to keychain
-          security import "$CERTPATH" -P $CERTPWD -A -t cert -f pkcs12 -k $KEYCHAINPATH -T /usr/bin/codesign
-          security set-key-partition-list -S apple-tool:,apple:, -s -k $KEYCHAINPATH -D "${CERT}" -t private $KEYCHAINPATH
-          
-          # Sign the binary
-          codesign -s "Developer ID Application" fluid.libmanipulation.mxo
-
-          /usr/bin/ditto -c -k --keepParent fluid.libmanipulation.mxo to_be_notarized.zip
-
-          xcrun notarytool store-credentials "ACPASS" --apple-id "$APPUSR" --team-id "$TEAMID" --password "$APPPWD"
-          xcrun notarytool submit to_be_notarized.zip --keychain-profile "ACPASS" --wait
-          xcrun stapler staple fluid.libmanipulation.mxo
 
           
