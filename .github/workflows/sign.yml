@@ -9,15 +9,17 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
-      - name: setup apple certificates and profiles
-        env:
+
+      - name: sign binaries
+        uses: flucoma/actions/distribution
+        with:
+          binaries: 'mxo'
           CERT: ${{ secrets.CERT }}
           CERTPWD: ${{ secrets.CERTPWD }}
           TEAMID: ${{ secrets.WWDRTEAMID }}
           APPPWD: ${{ secrets.APPSTORECONNECTPWD }}
           APPUSR: ${{ secrets.APPSTORECONNECTUSERNAME }}
-      - name: sign binaries
-        uses: flucoma/actions/distribution
+          
 
 
           
