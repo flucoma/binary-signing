@@ -1,6 +1,7 @@
 name: sign some binaries
-on: push
+on: 
     workflow_dispatch:
+    push: ["*"]
 
 
 jobs:
