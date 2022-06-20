@@ -41,8 +41,10 @@ jobs:
           # Sign the binary
           codesign -s "Developer ID Application" fluid.libmanipulation.mxo
 
+          /usr/bin/ditto -c -k --keepParent . to_be_notarized.zip
+
           xcrun notarytool store-credentials "ACPASS" --apple-id "$APPUSR" --team-id "$TEAMID" --password "$APPPWD"
-          xcrun notarytool submit fluid.libmanipulation.mxo --keychain-profile "ACPASS" --wait
+          xcrun notarytool submit to_be_notarized.zip --keychain-profile "ACPASS" --wait
           xcrun stapler staple fluid.libmanipulation.mxo
 
       - name: Setup tmate session
