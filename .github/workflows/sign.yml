@@ -26,7 +26,7 @@ jobs:
           # create temporary keychain
           security create-keychain -p "$KEYCHAINPWD" "$KEYCHAINPATH"
           security set-keychain-settings -lut 21600 "$KEYCHAINPATH"
-          security unlock-keychain -p "$KEYCHAINPWD" "$KEYCHAINPATH" -T /usr/bin/codesign
+          security unlock-keychain -p "$KEYCHAINPWD" "$KEYCHAINPATH"
 
           # import p12 to keychain
           security import "$CERTPATH" -P $CERTPWD -A -t cert -f pkcs12 -k $KEYCHAINPATH
