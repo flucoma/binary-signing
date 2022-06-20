@@ -25,20 +25,17 @@ jobs:
 
           # create temporary keychain
           security create-keychain -p "$KEYCHAINPWD" "$KEYCHAINPATH"
-          security set-keychain-settings -lut 21600 "$KEYCHAINPATH"
+
+          # append temp keychain to the user domain
+          security list-keychain -d user -s "$KEYCHAINPATH"
+
+          security set-keychain-settings "$KEYCHAINPATH"
           security unlock-keychain -p "$KEYCHAINPWD" "$KEYCHAINPATH"
 
           # import p12 to keychain
-          security import "$CERTPATH" -P $CERTPWD -A -t cert -f pkcs12 -k $KEYCHAINPATH
+          security import "$CERTPATH" -P $CERTPWD -A -t cert -f pkcs12 -k $KEYCHAINPATH -T /usr/bin/codesign
           security set-key-partition-list -S apple-tool:,apple:, -s -k $KEYCHAINPATH -D "${CERT}" -t private $KEYCHAINPATH
           
-          security list-keychain -d user -s $KEYCHAINPATH
-
-          # apply provisioning profile
-          # mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
-          # cp $PP_PATH ~/Library/MobileDevice/Provisioning\ Profiles
-
-          security find-identity -p codesigning
 
           # codesign -s "Developer ID Application" ./binary/fluid.libmanipulation.mxo
       - name: Setup tmate session
