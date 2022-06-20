@@ -14,7 +14,7 @@ jobs:
       - name: sign binaries
         uses: flucoma/actions/distribution@main
         with:
-          binaries: 'mxo'
+          binary: 'mxo'
           cert: ${{ secrets.CERT }}
           certpwd: ${{ secrets.CERTPWD }}
           teamid: ${{ secrets.WWDRTEAMID }}
