@@ -31,7 +31,6 @@ jobs:
 
           # append temp keychain to the user domain
           security list-keychain -d user -s "$KEYCHAINPATH"
-
           security set-keychain-settings "$KEYCHAINPATH"
           security unlock-keychain -p "$KEYCHAINPWD" "$KEYCHAINPATH"
 
@@ -39,7 +38,13 @@ jobs:
           security import "$CERTPATH" -P $CERTPWD -A -t cert -f pkcs12 -k $KEYCHAINPATH -T /usr/bin/codesign
           security set-key-partition-list -S apple-tool:,apple:, -s -k $KEYCHAINPATH -D "${CERT}" -t private $KEYCHAINPATH
           
-          # codesign -s "Developer ID Application" ./binary/fluid.libmanipulation.mxo
+          # Sign the binary
+          codesign -s "Developer ID Application" fluid.libmanipulation.mxo
+
+          xcrun notarytool store-credentials "ACPASS" --apple-id "$APPUSR" --team-id "$TEAMID" --password "$APPPWD"
+          xcrun notarytool submit fluid.libmanipulation.mxo --keychain-profile "ACPASS" --wait
+          xcrun stapler staple fluid.libmanipulation.mxo
+
       - name: Setup tmate session
         uses: mxschmitt/action-tmate@v3
 
